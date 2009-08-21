@@ -1,0 +1,18 @@
+Project Desktop3D
+
+Description:
+
+A project to make some cross platform 3D gadgets on your desktop for fun, joy and efficiency.
+
+Technology:
+
+Qt, OpenGL
+
+Status:
+
+Clock sample done.
+
+Todo:
+
+1. Grab the general parts from clock example, and put them into a library
+2. Create more gadgets: theatre, bookshelf, news wall, weather window, album, mailbox, lava light, fish tank, forest, earth, butterfly, flags, running buddy (twitter), small house, plants, farm, train, fishing, etc.
