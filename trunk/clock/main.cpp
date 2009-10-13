@@ -1,10 +1,13 @@
 #include <QtGui/QApplication>
-#include "widget.h"
+#include "weatherwindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    GLWidget w;
+    WeatherWindow w;
+    //w.updatePicture();
     w.show();
+    //WeatherInfo info;
+    //info.update("Changchun","zh-cn");
     return a.exec();
 }

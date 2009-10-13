@@ -1,5 +1,30 @@
 <RCC>
     <qresource prefix="/" >
-        <file>pics/waterlili.jpg</file>
+        <file>pics/waterlili.png</file>
+        <file>pics/wood.png</file>
+        <file>pics/sunny.png</file>
+        <file>pics/chance_of_rain.png</file>
+        <file>pics/chance_of_snow.png</file>
+        <file>pics/chance_of_storm.png</file>
+        <file>pics/chance_of_tstorm.png</file>
+        <file>pics/cloudy.png</file>
+        <file>pics/dust.png</file>
+        <file>pics/flurries,obg.png</file>
+        <file>pics/flurries.png</file>
+        <file>pics/fog.png</file>
+        <file>pics/haze.png</file>
+        <file>pics/icy.png</file>
+        <file>pics/mist.png</file>
+        <file>pics/mostly_cloudy.png</file>
+        <file>pics/mostly_sunny.png</file>
+        <file>pics/partly_cloudy.png</file>
+        <file>pics/rain.png</file>
+        <file>pics/sleet.png</file>
+        <file>pics/smoke.png</file>
+        <file>pics/snow.png</file>
+        <file>pics/storm.png</file>
+        <file>pics/thunderstorm.png</file>
+        <file>pics/windy.png</file>
+        <file>pics/undefined.png</file>
     </qresource>
 </RCC>
