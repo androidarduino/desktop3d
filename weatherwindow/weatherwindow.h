@@ -1,6 +1,6 @@
 #ifndef WEATHERWINDOW_H
 #define WEATHERWINDOW_H
-#include "widget.h"
+#include "../common/widget.h"
 #include "weatherinfo.h"
 #include <QPixmap>
 //«Á “ı ∂‡‘∆ …Ÿ‘∆ –°”Í ÷–”Í ¥Û”Í  ’Û”Í ¿◊’Û”Í ±©”Í

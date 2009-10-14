@@ -2,13 +2,14 @@
 # Project created by QtCreator 2009-08-18T20:39:20
 # -------------------------------------------------
 QT += opengl network xml
-TARGET = clock3d
+TARGET = weather3d
 TEMPLATE = app
 SOURCES += main.cpp \
-    widget.cpp \
+    ../common/widget.cpp \
     weatherwindow.cpp \
     weatherinfo.cpp
-HEADERS += widget.h \
+HEADERS += ../common/widget.h \
     weatherwindow.h \
     weatherinfo.h
-RESOURCES += clock3d.qrc
+RESOURCES += res.qrc
+INCLUDE += ../common
