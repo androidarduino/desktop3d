@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>fish.png</file>
+        <file>grass.png</file>
+        <file>tree.png</file>
+        <file>touchy.png</file>
+        <file>flower.png</file>
+        <file>kingofthepond.png</file>
+        <file>mystery.png</file>
+        <file>nibbler.png</file>
+        <file>plainol.png</file>
+        <file>smallfry.png</file>
+        <file>ground.png</file>
+        <file>sky.png</file>
+        <file>blank.png</file>
+    </qresource>
+</RCC>

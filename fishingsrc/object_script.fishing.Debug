@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\scene.o
+./debug\fish.o
+./debug\surface.o
+./debug\pool.o
+./debug\thing.o
+./debug\sky.o
+./debug\rod.o
+./debug\moc_scene.o
+./debug\qrc_pics.o
+);
