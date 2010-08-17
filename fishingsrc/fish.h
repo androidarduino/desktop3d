@@ -2,7 +2,7 @@
 #define FISH_H
 #include "thing.h"
 #include <QTimer>
-
+//by liu
 class Fish;
 
 class State
