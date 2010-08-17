@@ -85,14 +85,15 @@ public:
     bool tired();
     bool baitAround();
     bool blocked();
+    void hooked();
     bool facingBait();
     float baitDistance();
-    void hooked();
     float swingAngel(){return angel;}
     void goAhead();
     //status variables
     float speed, acceleration;
     float rudder, angel;
+    int triedTimes;
 private:
     QTimer timer;
 private slots:
