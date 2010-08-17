@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\scene.o
+./release\fish.o
+./release\surface.o
+./release\pool.o
+./release\thing.o
+./release\sky.o
+./release\rod.o
+./release\moc_scene.o
+./release\qrc_pics.o
+);
