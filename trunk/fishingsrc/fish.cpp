@@ -109,10 +109,12 @@ void PredatePadel::run()
     if(!owner->facingBait())
         owner->predateturn.activate();
     if(owner->baitDistance()<=0)
+    {
         if(++owner->triedTimes>3)//什么时候要清零？
             owner->hooked();
         else
             owner->predatejumpback.activate();
+    }
     //不断地重复打水前进，直到达到诱饵为止
 }
 
@@ -123,6 +125,7 @@ void PredateJumpBack::activate()
 
 void PredateJumpBack::run()
 {
+    float JUMPBACK_DISTANCE=0.1;
     if(!owner->baitAround())
         owner->swimpadel.activate();
     if(!owner->facingBait())
@@ -154,4 +157,14 @@ bool Fish::tired()
 bool Fish::facingBait()
 {
     return false;
+}
+
+float Fish::baitDistance()
+{
+    return 1.0;
+}
+
+void Fish::hooked()
+{
+
 }
