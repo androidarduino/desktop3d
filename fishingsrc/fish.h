@@ -1,6 +1,7 @@
 #ifndef FISH_H
 #define FISH_H
 #include "thing.h"
+#include <time.h>
 #include <QTimer>
 //by liu
 class Fish;
@@ -80,6 +81,7 @@ public:
     PredatePadel predatepadel;
     PredateJumpBack predatejumpback;
     ScaredPadel scaredpadel;
+    Thing* bait;
 public:
     //helper functions
     bool tired();
@@ -90,10 +92,13 @@ public:
     float baitDistance();
     float swingAngel(){return angel;}
     void goAhead();
+    bool chance(float percent);
     //status variables
-    float speed, acceleration;
+    float speed, acceleration, resistance;
     float rudder, angel;
     int triedTimes;
+    float strength;
+    float MAX_SPEED;
 private:
     QTimer timer;
 private slots:

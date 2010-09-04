@@ -6,8 +6,11 @@ Fish::Fish(QString pic, float w, float h):Thing(pic,w,h)
     swimpadel.owner=swimturn.owner=swimslide.owner=predateturn.owner=predatepadel.owner=predatejumpback.owner=scaredpadel.owner=this;
     swimpadel.activate();
     acceleration=0.002;
-    rudder=0.1;
+    resistance=0.001;
+    strength=10;
+    rudder=5;
     speed=0;
+    MAX_SPEED=0.5;
     dir=3.14/6;
     timer.setInterval(200);
     timer.start();
@@ -26,7 +29,7 @@ void Fish::draw()
 
 void Fish::goAhead()
 {
-    dir+=rudder;
+    dir+=rudder*speed;
     posZ-=speed*sin(dir);
     posX-=speed*cos(dir);
 }
@@ -43,8 +46,9 @@ void SwimPadel::run()
         owner->angel=-10;
     else
         owner->angel=10;
-    owner->speed+=owner->acceleration;
+    owner->speed+=owner->acceleration*(1-owner->speed/owner->MAX_SPEED);
     //在这里随机转向，并随机消耗一些力气，以达到累的效果
+    owner->strength--;//add random flavour later
     owner->goAhead();
     //如果发现鱼饵，则转入捕转向动作
     if(owner->baitAround())
@@ -53,7 +57,7 @@ void SwimPadel::run()
     if(owner->blocked())
         owner->swimturn.activate();
     //如果感到劳累，则转入游滑行动作
-    if(owner->tired())
+    if(owner->tired())//todo
         owner->swimslide.activate();
 }
 
@@ -78,15 +82,23 @@ void SwimSlide::run()
 {
     if(owner->blocked())
         owner->swimturn.activate();
-    if(!owner->tired())
+    if((!owner->tired())&&(owner->chance(0.1)||owner->speed==0))//where 3% is the possibility to change status to padel
         owner->swimpadel.activate();
     if(owner->baitAround())
         owner->predateturn.activate();
+    owner->speed-=owner->resistance;
+    if(owner->speed<0)
+        owner->speed=0;
+    owner->strength++;//add random flavour later
+    if(owner->strength>10)//ceil of strength
+        owner->strength=10;
+    owner->goAhead();
     //滑动时不需要动作，只是慢慢根据水的阻力减速，并恢复体力
 }
 
 void PredateTurn::activate()
 {
+    qDebug()<<"predate turn activated.";
     owner->currentState=this;
 }
 
@@ -99,6 +111,7 @@ void PredateTurn::run()
 
 void PredatePadel::activate()
 {
+    qDebug()<<"predate padel activated.";
     owner->currentState=this;
 }
 
@@ -108,7 +121,7 @@ void PredatePadel::run()
         owner->swimpadel.activate();
     if(!owner->facingBait())
         owner->predateturn.activate();
-    if(owner->baitDistance()<=0)
+    if(owner->baitDistance()<=speed)//剩下的距离不够一步的
     {
         if(++owner->triedTimes>3)//什么时候要清零？
             owner->hooked();
@@ -120,6 +133,7 @@ void PredatePadel::run()
 
 void PredateJumpBack::activate()
 {
+    qDebug()<<"predate jump back activated.";
     owner->currentState=this;
 }
 
@@ -141,21 +155,24 @@ void PredateJumpBack::run()
 
 bool Fish::baitAround()
 {
+    //计算鱼饵的位置和自己中心的距离，小于视线距离的时候则返回true
     return false;
 }
 
 bool Fish::blocked()
 {
+    //查看前方是否可以走，如果不可走则返回true
     return false;
 }
 
 bool Fish::tired()
 {
-    return false;
+    return strength<1;
 }
 
 bool Fish::facingBait()
 {
+    //计算自己朝向和鱼饵方向之间的夹角，小于某一阈值时返回true
     return false;
 }
 
@@ -167,4 +184,12 @@ float Fish::baitDistance()
 void Fish::hooked()
 {
 
+}
+
+bool Fish::chance(float percent)
+{
+    //srand((unsigned)time(0));
+    int rnd=rand()%1000;
+    qDebug()<<rnd<<percent*1000<<(rnd<percent*1000);
+    return rnd<percent*1000;
 }
