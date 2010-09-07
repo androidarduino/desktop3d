@@ -38,6 +38,13 @@ void Fish::goAhead()
     posX-=speed*cos(dir);
 }
 
+void Fish::goBack()
+{
+    dir+=rudder*speed;
+    posZ+=speed*sin(dir);
+    posX+=speed*cos(dir);
+}
+
 void SwimPadel::activate()
 {
     owner->currentState=this;
@@ -68,6 +75,7 @@ void SwimPadel::run()
 void SwimTurn::activate()
 {
     owner->currentState=this;
+    //randomly choose a turn direction, it will be stuck on in this turn
 }
 
 void SwimTurn::run()
@@ -108,23 +116,31 @@ void PredateTurn::activate()
 
 void PredateTurn::run()
 {
-    if(abs(owner->facingBait())<FACING_BAIT_THRESHOLD)
+    float fb=owner->facingBait();
+    if(fb<0)
+        fb=-fb;
+    if(fb<owner->FACING_BAIT_THRESHOLD)
     {
         owner->predatepadel.activate();
         return;
     }
     //否则继续转向诱饵
     if(owner->facingBait()>0)
-        dir+=BAIT_TURN_ANGEL;
+        owner->turn(owner->BAIT_TURN_ANGEL);
     else
-        dir-=BAIT_TURN_ANGEL;
+        owner->turn(-owner->BAIT_TURN_ANGEL);
+}
+
+void Fish::turn(float a)
+{
+    dir+=a;
 }
 
 void PredatePadel::activate()
 {
     qDebug()<<"predate padel activated.";
     owner->currentState=this;
-    rudder=0;
+    owner->rudder=0;
 }
 
 void PredatePadel::run()
@@ -136,7 +152,7 @@ void PredatePadel::run()
         owner->swimpadel.activate();
     if(!owner->facingBait())
         owner->predateturn.activate();
-    if(owner->baitDistance()<=speed)//剩下的距离不够一步的
+    if(owner->baitDistance()<=owner->speed)//剩下的距离不够一步的
     {
         if(++owner->triedTimes>3)//什么时候要清零？
             owner->hooked();
@@ -149,20 +165,19 @@ void PredateJumpBack::activate()
 {
     qDebug()<<"predate jump back activated.";
     owner->currentState=this;
-    rudder=0;
+    owner->rudder=0;
 }
 
 void PredateJumpBack::run()
 {
     //不断后退，直到够远，碰到障碍物或者速度为0
-    posZ+=speed*sin(dir);
-    posX+=speed*cos(dir);
+    owner->goBack();
 
     if(!owner->baitAround())
         owner->swimpadel.activate();
     if(!owner->facingBait())
         owner->predateturn.activate();
-    if(owner->baitDistance()>JUMPBACK_DISTANCE)
+    if(owner->baitDistance()>owner->JUMPBACK_DISTANCE)
         owner->predatepadel.activate();
     if(owner->blocked())
         owner->predatepadel.activate();
@@ -193,7 +208,7 @@ bool Fish::tired()
 float Fish::facingBait()
 {
     //计算自己朝向和鱼饵方向之间的夹角，小于某一阈值时返回true
-    float baitDir=arctan((bait.posZ-posZ)/(bait.posX-posX));
+    float baitDir=atan((bait->posZ-posZ)/(bait->posX-posX));
     //verify that the baitdir and dir are in the same unit
     return baitDir-dir;
 }
