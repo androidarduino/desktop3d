@@ -11,6 +11,10 @@ Fish::Fish(QString pic, float w, float h):Thing(pic,w,h)
     rudder=5;
     speed=0;
     MAX_SPEED=0.5;
+    BAIT_DISTANCE_THRESHOLD=0.1;
+    FACING_BAIT_THRESHOLD=0.3;
+    BAIT_TURN_ANGEL=0.1;
+    JUMPBACK_DISTANCE=0.1;
     dir=3.14/6;
     timer.setInterval(200);
     timer.start();
@@ -104,19 +108,30 @@ void PredateTurn::activate()
 
 void PredateTurn::run()
 {
-    if(owner->facingBait())
+    if(abs(owner->facingBait())<FACING_BAIT_THRESHOLD)
+    {
         owner->predatepadel.activate();
+        return;
+    }
     //否则继续转向诱饵
+    if(owner->facingBait()>0)
+        dir+=BAIT_TURN_ANGEL;
+    else
+        dir-=BAIT_TURN_ANGEL;
 }
 
 void PredatePadel::activate()
 {
     qDebug()<<"predate padel activated.";
     owner->currentState=this;
+    rudder=0;
 }
 
 void PredatePadel::run()
 {
+    //不断地重复打水前进，直到达到诱饵为止
+    owner->goAhead();
+    //check current status
     if(!owner->baitAround())
         owner->swimpadel.activate();
     if(!owner->facingBait())
@@ -128,18 +143,21 @@ void PredatePadel::run()
         else
             owner->predatejumpback.activate();
     }
-    //不断地重复打水前进，直到达到诱饵为止
 }
 
 void PredateJumpBack::activate()
 {
     qDebug()<<"predate jump back activated.";
     owner->currentState=this;
+    rudder=0;
 }
 
 void PredateJumpBack::run()
 {
-    float JUMPBACK_DISTANCE=0.1;
+    //不断后退，直到够远，碰到障碍物或者速度为0
+    posZ+=speed*sin(dir);
+    posX+=speed*cos(dir);
+
     if(!owner->baitAround())
         owner->swimpadel.activate();
     if(!owner->facingBait())
@@ -150,13 +168,15 @@ void PredateJumpBack::run()
         owner->predatepadel.activate();
     if(owner->speed>0)
         owner->predatepadel.activate();
-    //不断后退，直到够远，碰到障碍物或者速度为0
 }
 
 bool Fish::baitAround()
 {
     //计算鱼饵的位置和自己中心的距离，小于视线距离的时候则返回true
-    return false;
+    if(baitDistance()>BAIT_DISTANCE_THRESHOLD)
+        return false;
+    else
+        return true;
 }
 
 bool Fish::blocked()
@@ -170,15 +190,19 @@ bool Fish::tired()
     return strength<1;
 }
 
-bool Fish::facingBait()
+float Fish::facingBait()
 {
     //计算自己朝向和鱼饵方向之间的夹角，小于某一阈值时返回true
-    return false;
+    float baitDir=arctan((bait.posZ-posZ)/(bait.posX-posX));
+    //verify that the baitdir and dir are in the same unit
+    return baitDir-dir;
 }
 
 float Fish::baitDistance()
 {
-    return 1.0;
+    float distance2=(bait->posZ-posZ)*(bait->posZ-posZ);
+    distance2+=(bait->posX-posX)*(bait->posX-posX);
+    return sqrt(distance2);
 }
 
 void Fish::hooked()

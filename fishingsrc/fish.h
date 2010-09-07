@@ -88,7 +88,7 @@ public:
     bool baitAround();
     bool blocked();
     void hooked();
-    bool facingBait();
+    float facingBait();
     float baitDistance();
     float swingAngel(){return angel;}
     void goAhead();
@@ -98,7 +98,7 @@ public:
     float rudder, angel;
     int triedTimes;
     float strength;
-    float MAX_SPEED;
+    float MAX_SPEED, BAIT_DISTANCE_THRESHOLD, FACING_BAIT_THRESHOLD, BAIT_TURN_ANGEL, JUMPBACK_DISTANCE;
 private:
     QTimer timer;
 private slots:
