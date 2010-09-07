@@ -14,12 +14,12 @@ public:
     virtual void init();
     void putTo(float x, float y, float z);
     void rotate(float x, float y, float z);
+    float posX, posY, posZ, rotX, rotY, rotZ;
     Scene* container;
 protected:
     QPixmap* picture;
     GLuint texture;
     float picWidth, picHeight;
-    float posX, posY, posZ, rotX, rotY, rotZ;
     float curX, curY, dir;
     virtual float swingAngel(){return 0.0;}
 };

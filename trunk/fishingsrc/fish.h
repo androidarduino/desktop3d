@@ -89,9 +89,11 @@ public:
     bool blocked();
     void hooked();
     float facingBait();
+    void turn(float a);
     float baitDistance();
     float swingAngel(){return angel;}
     void goAhead();
+    void goBack();
     bool chance(float percent);
     //status variables
     float speed, acceleration, resistance;

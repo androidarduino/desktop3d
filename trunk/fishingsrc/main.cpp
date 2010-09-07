@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     fish7.putTo(0.1,-0.194,0.1);
     fish8.putTo(0.1,-0.193,0.1);
     bait.putTo(0.2,-0.18,0.2);
+    fish1.bait=&bait;
     w.add(&fish1);
     /*w.add(&fish2);
     w.add(&fish3);
