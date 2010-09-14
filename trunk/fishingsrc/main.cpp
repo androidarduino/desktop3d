@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     Fish fish6(":/mystery.png",0.47,0.17);
     Fish fish7(":/plainol.png",0.19,0.12);
     Fish fish8(":/smallfry.png",0.14,0.10);
-    Bait bait;
+    Fish bait(":/smallfry.png",0.14,0.10);
     //fish1.setBaitPos(0.2,-0.18);
     Thing ground(":/ground.png", 3, 3);
     Thing g1(":/blank.png",3,3);
@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     fish8.putTo(0.1,-0.193,0.1);
     bait.putTo(0.2,-0.18,0.2);
     fish1.bait=&bait;
+    w.add(&bait);
     w.add(&fish1);
     /*w.add(&fish2);
     w.add(&fish3);
