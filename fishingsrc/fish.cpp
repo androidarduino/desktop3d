@@ -47,11 +47,13 @@ void Fish::goBack()
 
 void SwimPadel::activate()
 {
+    qDebug()<<"swim padel activated.";
     owner->currentState=this;
 }
 
 void SwimPadel::run()
 {
+    //qDebug()<<"swimpadel running"<<owner->baitAround();
     //这个状态中，鱼进行打水的动作
     if(owner->angel>0)
         owner->angel=-10;
@@ -74,6 +76,7 @@ void SwimPadel::run()
 
 void SwimTurn::activate()
 {
+    qDebug()<<"swimturn activated";
     owner->currentState=this;
     //randomly choose a turn direction, it will be stuck on in this turn
 }
@@ -87,6 +90,7 @@ void SwimTurn::run()
 
 void SwimSlide::activate()
 {
+    qDebug()<<"swimslide activated";
     owner->currentState=this;
 }
 
@@ -188,10 +192,8 @@ void PredateJumpBack::run()
 bool Fish::baitAround()
 {
     //计算鱼饵的位置和自己中心的距离，小于视线距离的时候则返回true
-    if(baitDistance()>BAIT_DISTANCE_THRESHOLD)
-        return false;
-    else
-        return true;
+    qDebug()<<"baitaround called";
+    return baitDistance()<BAIT_DISTANCE_THRESHOLD;
 }
 
 bool Fish::blocked()
@@ -215,8 +217,13 @@ float Fish::facingBait()
 
 float Fish::baitDistance()
 {
-    float distance2=(bait->posZ-posZ)*(bait->posZ-posZ);
-    distance2+=(bait->posX-posX)*(bait->posX-posX);
+    qDebug()<<"baitdistance called"<<bait->posZ;
+    return 0.15;
+    float dz=bait->posZ-posZ;
+    float distance2=dz*dz;
+    dz=bait->posX-posX;
+    distance2+=dz*dz;
+    qDebug()<<sqrt(distance2);
     return sqrt(distance2);
 }
 

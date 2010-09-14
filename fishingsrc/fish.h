@@ -81,7 +81,7 @@ public:
     PredatePadel predatepadel;
     PredateJumpBack predatejumpback;
     ScaredPadel scaredpadel;
-    Thing* bait;
+    Fish* bait;
 public:
     //helper functions
     bool tired();
