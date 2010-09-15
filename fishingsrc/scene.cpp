@@ -55,7 +55,7 @@ void Scene::paintGL()
      glMatrixMode(GL_PROJECTION);
      glLoadIdentity();
      //glOrtho(-1, 1, 1, -1, 4.0, 15.0);
-     qDebug()<<width<<height<<width/height;
+//     qDebug()<<width<<height<<width/height;
      gluPerspective(60,((float)width)/height,1,1000);
      glMatrixMode(GL_MODELVIEW);
  }

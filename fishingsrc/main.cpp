@@ -82,6 +82,5 @@ int main(int argc, char *argv[])
     w.add(&grass2);
     w.resize(800,600);
     w.show();
-    qDebug()<<bait.posZ;
     return a.exec();
 }

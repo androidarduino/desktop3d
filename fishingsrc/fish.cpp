@@ -198,7 +198,6 @@ void PredateJumpBack::run()
 bool Fish::baitAround()
 {
     //计算鱼饵的位置和自己中心的距离，小于视线距离的时候则返回true
-    qDebug()<<"baitaround called";
     return baitDistance()<BAIT_DISTANCE_THRESHOLD;
 }
 
@@ -228,7 +227,7 @@ float Fish::baitDistance()
     float distance2=d*d;
     d=baitX-posX;
     distance2+=d*d;
-    qDebug()<<sqrt(distance2);
+    //qDebug()<<sqrt(distance2);
     return sqrt(distance2);
 }
 
@@ -241,6 +240,6 @@ bool Fish::chance(float percent)
 {
     //srand((unsigned)time(0));
     int rnd=rand()%1000;
-    qDebug()<<rnd<<percent*1000<<(rnd<percent*1000);
+    //qDebug()<<rnd<<percent*1000<<(rnd<percent*1000);
     return rnd<percent*1000;
 }
