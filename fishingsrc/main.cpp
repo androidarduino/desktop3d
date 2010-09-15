@@ -14,7 +14,10 @@ int main(int argc, char *argv[])
     Thing flower(":/flower.png", 0.3, 0.35);
     Thing grass1(":/grass.png", 0.3, 0.1);
     Thing grass2(":/grass.png", 0.3, 0.1);
+    Thing bait(":/smallfry.png",0.14,0.10);
+    bait.putTo(0.2,-0.18,0.2);
     Fish fish1(":/nibbler.png",0.2,0.17);
+    fish1.setBait(bait);
     Fish fish2(":/touchy.png",0.17,0.13);
     Fish fish3(":/plainol.png",0.19,0.12);
     Fish fish4(":/kingofthepond.png",0.5,0.21);
@@ -22,7 +25,6 @@ int main(int argc, char *argv[])
     Fish fish6(":/mystery.png",0.47,0.17);
     Fish fish7(":/plainol.png",0.19,0.12);
     Fish fish8(":/smallfry.png",0.14,0.10);
-    Fish bait(":/smallfry.png",0.14,0.10);
     //fish1.setBaitPos(0.2,-0.18);
     Thing ground(":/ground.png", 3, 3);
     Thing g1(":/blank.png",3,3);
@@ -56,8 +58,6 @@ int main(int argc, char *argv[])
     fish6.putTo(0.1,-0.195,0.1);
     fish7.putTo(0.1,-0.194,0.1);
     fish8.putTo(0.1,-0.193,0.1);
-    bait.putTo(0.2,-0.18,0.2);
-    fish1.bait=&bait;
     w.add(&bait);
     w.add(&fish1);
     /*w.add(&fish2);
@@ -82,5 +82,6 @@ int main(int argc, char *argv[])
     w.add(&grass2);
     w.resize(800,600);
     w.show();
+    qDebug()<<bait.posZ;
     return a.exec();
 }

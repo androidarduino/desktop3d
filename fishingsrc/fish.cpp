@@ -21,6 +21,12 @@ Fish::Fish(QString pic, float w, float h):Thing(pic,w,h)
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
+void Fish::setBait(Thing& b)
+{
+    baitX=b.posX;
+    baitZ=b.posZ;
+}
+
 void Fish::timeOut()
 {
     this->currentState->run();
@@ -210,19 +216,18 @@ bool Fish::tired()
 float Fish::facingBait()
 {
     //计算自己朝向和鱼饵方向之间的夹角，小于某一阈值时返回true
-    float baitDir=atan((bait->posZ-posZ)/(bait->posX-posX));
+    float baitDir=atan((baitZ-posZ)/(baitX-posX));
     //verify that the baitdir and dir are in the same unit
     return baitDir-dir;
+    return 30;
 }
 
 float Fish::baitDistance()
 {
-    qDebug()<<"baitdistance called"<<bait->posZ;
-    return 0.15;
-    float dz=bait->posZ-posZ;
-    float distance2=dz*dz;
-    dz=bait->posX-posX;
-    distance2+=dz*dz;
+    float d=baitZ-posZ;
+    float distance2=d*d;
+    d=baitX-posX;
+    distance2+=d*d;
     qDebug()<<sqrt(distance2);
     return sqrt(distance2);
 }
