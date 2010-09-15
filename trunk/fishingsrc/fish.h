@@ -81,7 +81,6 @@ public:
     PredatePadel predatepadel;
     PredateJumpBack predatejumpback;
     ScaredPadel scaredpadel;
-    Fish* bait;
 public:
     //helper functions
     bool tired();
@@ -94,6 +93,7 @@ public:
     float swingAngel(){return angel;}
     void goAhead();
     void goBack();
+    void setBait(Thing& b);
     bool chance(float percent);
     //status variables
     float speed, acceleration, resistance;
@@ -103,6 +103,7 @@ public:
     float MAX_SPEED, BAIT_DISTANCE_THRESHOLD, FACING_BAIT_THRESHOLD, BAIT_TURN_ANGEL, JUMPBACK_DISTANCE;
 private:
     QTimer timer;
+    float baitX, baitZ;
 private slots:
     void timeOut();
 };

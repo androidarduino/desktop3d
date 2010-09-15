@@ -3,6 +3,7 @@
 # -------------------------------------------------
 QT += opengl
 TARGET = fishing
+CONFIG += debug
 TEMPLATE = app
 SOURCES += main.cpp \
     scene.cpp \
