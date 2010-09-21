@@ -9,8 +9,9 @@ Fish::Fish(QString pic, float w, float h):Thing(pic,w,h)
     resistance=0.001;
     strength=10;
     rudder=5;
+    noRudder=1;
     speed=0;
-    MAX_SPEED=0.5;
+    MAX_SPEED=0.05;
     BAIT_DISTANCE_THRESHOLD=0.1;
     FACING_BAIT_THRESHOLD=0.3;
     BAIT_TURN_ANGEL=0.1;
@@ -39,14 +40,14 @@ void Fish::draw()
 
 void Fish::goAhead()
 {
-    dir+=rudder*speed;
+    dir+=rudder*speed*noRudder;
     posZ-=speed*sin(dir);
     posX-=speed*cos(dir);
 }
 
 void Fish::goBack()
 {
-    dir+=rudder*speed;
+    dir+=rudder*speed*noRudder;
     posZ+=speed*sin(dir);
     posX+=speed*cos(dir);
 }
@@ -55,6 +56,7 @@ void SwimPadel::activate()
 {
     qDebug()<<"swim padel activated.";
     owner->currentState=this;
+    owner->noRudder=1;
 }
 
 void SwimPadel::run()
@@ -87,7 +89,8 @@ void SwimTurn::activate()
 {
     qDebug()<<"swimturn activated";
     owner->currentState=this;
-    //randomly choose a turn direction, it will be stuck on in this turn
+    owner->noRudder=1;
+    //randomly choose a turn direction, and modify rudder accordingly
 }
 
 void SwimTurn::run()
@@ -101,13 +104,14 @@ void SwimSlide::activate()
 {
     qDebug()<<"swimslide activated";
     owner->currentState=this;
+    owner->noRudder=1;
 }
 
 void SwimSlide::run()
 {
     if(owner->blocked())
         owner->swimturn.activate();
-    if((!owner->tired())&&(owner->chance(0.1)||owner->speed==0))//where 3% is the possibility to change status to padel
+    if((!owner->tired())&&(owner->chance(0.1)||owner->speed==0))//where 0.1 is the possibility to change status to padel
         owner->swimpadel.activate();
     if(owner->baitAround())
         owner->predateturn.activate();
@@ -125,6 +129,7 @@ void PredateTurn::activate()
 {
     qDebug()<<"predate turn activated.";
     owner->currentState=this;
+    owner->noRudder=0;
 }
 
 void PredateTurn::run()
@@ -134,6 +139,7 @@ void PredateTurn::run()
         fb=-fb;
     if(fb<owner->FACING_BAIT_THRESHOLD)
     {
+        qDebug()<<"YEAH now predate.";
         owner->predatepadel.activate();
         return;
     }
@@ -153,7 +159,7 @@ void PredatePadel::activate()
 {
     qDebug()<<"predate padel activated.";
     owner->currentState=this;
-    owner->rudder=0;
+    owner->noRudder=0;
 }
 
 void PredatePadel::run()
@@ -168,7 +174,7 @@ void PredatePadel::run()
     //qDebug()<<"distance: "<<owner->baitDistance()<<owner->speed;
     if(owner->baitDistance()<=owner->speed)//剩下的距离不够一步的
     {
-        qDebug()<<"now here"<<owner->triedTimes;
+        //qDebug()<<"now here"<<owner->triedTimes;
         if(++owner->triedTimes>3)//什么时候要清零？
             owner->hooked();
         else
@@ -180,14 +186,14 @@ void PredateJumpBack::activate()
 {
     qDebug()<<"predate jump back activated.";
     owner->currentState=this;
-    owner->rudder=0;
+    owner->noRudder=0;
 }
 
 void PredateJumpBack::run()
 {
     //不断后退，直到够远，碰到障碍物或者速度为0
     owner->goBack();
-        qDebug()<<owner->baitDistance()<<owner->JUMPBACK_DISTANCE;
+        //qDebug()<<owner->baitDistance()<<owner->JUMPBACK_DISTANCE;
 
     if(!owner->baitAround())
         owner->swimpadel.activate();
@@ -224,9 +230,9 @@ float Fish::facingBait()
 {
     //计算自己朝向和鱼饵方向之间的夹角，小于某一阈值时返回true
     float baitDir=atan((baitZ-posZ)/(baitX-posX));
+    qDebug()<<"dirs: "<<baitDir<<dir<<baitZ<<posZ<<baitX<<posX;
     //verify that the baitdir and dir are in the same unit
     return baitDir-dir;
-    return 30;
 }
 
 float Fish::baitDistance()
@@ -246,7 +252,7 @@ void Fish::hooked()
 
 bool Fish::chance(float percent)
 {
-    //srand((unsigned)time(0));
+    srand((unsigned)time(0));
     int rnd=rand()%1000;
     //qDebug()<<rnd<<percent*1000<<(rnd<percent*1000);
     return rnd<percent*1000;
