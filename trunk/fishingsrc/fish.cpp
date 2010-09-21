@@ -71,7 +71,10 @@ void SwimPadel::run()
     owner->goAhead();
     //如果发现鱼饵，则转入捕转向动作
     if(owner->baitAround())
+    {
+        owner->triedTimes=0;
         owner->predateturn.activate();
+    }
     //如果发现前方无法前进，则转向游转向动作
     if(owner->blocked())
         owner->swimturn.activate();
@@ -162,8 +165,10 @@ void PredatePadel::run()
         owner->swimpadel.activate();
     if(!owner->facingBait())
         owner->predateturn.activate();
+    //qDebug()<<"distance: "<<owner->baitDistance()<<owner->speed;
     if(owner->baitDistance()<=owner->speed)//剩下的距离不够一步的
     {
+        qDebug()<<"now here"<<owner->triedTimes;
         if(++owner->triedTimes>3)//什么时候要清零？
             owner->hooked();
         else
@@ -182,17 +187,20 @@ void PredateJumpBack::run()
 {
     //不断后退，直到够远，碰到障碍物或者速度为0
     owner->goBack();
+        qDebug()<<owner->baitDistance()<<owner->JUMPBACK_DISTANCE;
 
     if(!owner->baitAround())
         owner->swimpadel.activate();
     if(!owner->facingBait())
         owner->predateturn.activate();
     if(owner->baitDistance()>owner->JUMPBACK_DISTANCE)
+    {
         owner->predatepadel.activate();
+    }
     if(owner->blocked())
         owner->predatepadel.activate();
-    if(owner->speed>0)
-        owner->predatepadel.activate();
+    //if(owner->speed>0)
+    //    owner->predatepadel.activate();
 }
 
 bool Fish::baitAround()
