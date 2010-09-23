@@ -15,7 +15,7 @@ Fish::Fish(QString pic, float w, float h):Thing(pic,w,h)
     BAIT_DISTANCE_THRESHOLD=0.1;
     FACING_BAIT_THRESHOLD=0.3;
     BAIT_TURN_ANGEL=0.1;
-    JUMPBACK_DISTANCE=0.1;
+    JUMPBACK_DISTANCE=0.08;
     dir=3.14/6;
     timer.setInterval(200);
     timer.start();
@@ -75,14 +75,21 @@ void SwimPadel::run()
     if(owner->baitAround())
     {
         owner->triedTimes=0;
+        qDebug()<<"bait found, change to predate turn";
         owner->predateturn.activate();
     }
     //如果发现前方无法前进，则转向游转向动作
     if(owner->blocked())
+    {
+        qDebug()<<"way blocked, change to swim turn";
         owner->swimturn.activate();
+    }
     //如果感到劳累，则转入游滑行动作
     if(owner->tired())//todo
+    {
+        qDebug()<<"tired, change to swim slide";
         owner->swimslide.activate();
+    }
 }
 
 void SwimTurn::activate()
@@ -96,13 +103,16 @@ void SwimTurn::activate()
 void SwimTurn::run()
 {
     if(!owner->blocked())
+    {
+        qDebug()<<"block disappeared, change to swim padel";
         owner->swimpadel.activate();
+    }
     //如果仍有挡路的东西，则继续转向
 }
 
 void SwimSlide::activate()
 {
-    qDebug()<<"swimslide activated";
+//    qDebug()<<"swimslide activated";
     owner->currentState=this;
     owner->noRudder=1;
 }
@@ -110,11 +120,20 @@ void SwimSlide::activate()
 void SwimSlide::run()
 {
     if(owner->blocked())
+    {
+        qDebug()<<"way blocked, change to swim turn";
         owner->swimturn.activate();
+    }
     if((!owner->tired())&&(owner->chance(0.1)||owner->speed==0))//where 0.1 is the possibility to change status to padel
+    {
         owner->swimpadel.activate();
+        qDebug()<<"tired, or randomly change to swim padel";
+    }
     if(owner->baitAround())
+    {
+        qDebug()<<"found bait, change to predate turn";
         owner->predateturn.activate();
+    }
     owner->speed-=owner->resistance;
     if(owner->speed<0)
         owner->speed=0;
@@ -139,7 +158,7 @@ void PredateTurn::run()
         fb=-fb;
     if(fb<owner->FACING_BAIT_THRESHOLD)
     {
-        qDebug()<<"YEAH now predate.";
+        qDebug()<<"facing bait now, start to predate padel.";
         owner->predatepadel.activate();
         return;
     }
@@ -168,17 +187,29 @@ void PredatePadel::run()
     owner->goAhead();
     //check current status
     if(!owner->baitAround())
+    {
+        qDebug()<<"bait lost, change back to swim padel";
         owner->swimpadel.activate();
+    }
     if(!owner->facingBait())
+    {
+        qDebug()<<"bait around but not facing, change to predate turn";
         owner->predateturn.activate();
+    }
     //qDebug()<<"distance: "<<owner->baitDistance()<<owner->speed;
     if(owner->baitDistance()<=owner->speed)//剩下的距离不够一步的
     {
         //qDebug()<<"now here"<<owner->triedTimes;
-        if(++owner->triedTimes>3)//什么时候要清零？
+        if(++owner->triedTimes>=3)//什么时候要清零？
+        {
+            qDebug()<<"tried enough, now eat it";
             owner->hooked();
+        }
         else
+        {
             owner->predatejumpback.activate();
+            qDebug()<<"try one more time";
+        }
     }
 }
 
@@ -196,15 +227,25 @@ void PredateJumpBack::run()
         //qDebug()<<owner->baitDistance()<<owner->JUMPBACK_DISTANCE;
 
     if(!owner->baitAround())
+    {
         owner->swimpadel.activate();
+        qDebug()<<"bait lost, go back to swim padel";
+    }
     if(!owner->facingBait())
+    {
+        qDebug()<<"not facing bait, change to predate turn";
         owner->predateturn.activate();
+    }
     if(owner->baitDistance()>owner->JUMPBACK_DISTANCE)
     {
+        qDebug()<<"bait distance long enough, now predate ahead.";
         owner->predatepadel.activate();
     }
     if(owner->blocked())
+    {
+        qDebug()<<"way blocked, can't jump back, change to predate ahead";
         owner->predatepadel.activate();
+    }
     //if(owner->speed>0)
     //    owner->predatepadel.activate();
 }
@@ -229,8 +270,8 @@ bool Fish::tired()
 float Fish::facingBait()
 {
     //计算自己朝向和鱼饵方向之间的夹角，小于某一阈值时返回true
-    float baitDir=atan((baitZ-posZ)/(baitX-posX));
-    qDebug()<<"dirs: "<<baitDir<<dir<<baitZ<<posZ<<baitX<<posX;
+    double baitDir=atan((baitZ-posZ)/(baitX-posX));
+//    qDebug()<<"dirs: "<<baitDir<<dir<<baitZ<<posZ<<baitX<<posX;
     //verify that the baitdir and dir are in the same unit
     return baitDir-dir;
 }
