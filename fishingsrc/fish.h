@@ -96,14 +96,14 @@ public:
     void setBait(Thing& b);
     bool chance(float percent);
     //status variables
-    float speed, acceleration, resistance;
-    float rudder, angel, noRudder;
+    double speed, acceleration, resistance;
+    double rudder, angel, noRudder;
     int triedTimes;
-    float strength;
-    float MAX_SPEED, BAIT_DISTANCE_THRESHOLD, FACING_BAIT_THRESHOLD, BAIT_TURN_ANGEL, JUMPBACK_DISTANCE;
+    double strength;
+    double MAX_SPEED, BAIT_DISTANCE_THRESHOLD, FACING_BAIT_THRESHOLD, BAIT_TURN_ANGEL, JUMPBACK_DISTANCE;
 private:
     QTimer timer;
-    float baitX, baitZ;
+    double baitX, baitZ;
 private slots:
     void timeOut();
 };

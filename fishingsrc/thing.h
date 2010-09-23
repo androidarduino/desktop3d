@@ -20,7 +20,7 @@ protected:
     QPixmap* picture;
     GLuint texture;
     float picWidth, picHeight;
-    float curX, curY, dir;
+    double curX, curY, dir;
     virtual float swingAngel(){return 0.0;}
 };
 

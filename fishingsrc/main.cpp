@@ -18,13 +18,14 @@ int main(int argc, char *argv[])
     bait.putTo(0.2,-0.18,0.2);
     Fish fish1(":/nibbler.png",0.2,0.17);
     fish1.setBait(bait);
-    Fish fish2(":/touchy.png",0.17,0.13);
+    /*Fish fish2(":/touchy.png",0.17,0.13);
     Fish fish3(":/plainol.png",0.19,0.12);
     Fish fish4(":/kingofthepond.png",0.5,0.21);
     Fish fish5(":/nibbler.png",0.25,0.20);
     Fish fish6(":/mystery.png",0.47,0.17);
     Fish fish7(":/plainol.png",0.19,0.12);
     Fish fish8(":/smallfry.png",0.14,0.10);
+    */
     //fish1.setBaitPos(0.2,-0.18);
     Thing ground(":/ground.png", 3, 3);
     Thing g1(":/blank.png",3,3);
@@ -50,14 +51,14 @@ int main(int argc, char *argv[])
     g2.putTo(3,0,0.1);
     g3.putTo(0,0,-2.9);
     sky.putTo(0,4.45,1.5);
-    fish1.putTo(0.1,-0.20,0.1);
+    /*fish1.putTo(0.1,-0.20,0.1);
     fish2.putTo(0.1,-0.199,0.1);
     fish3.putTo(0.1,-0.198,0.1);
     fish4.putTo(0.1,-0.197,0.1);
     fish5.putTo(0.1,-0.196,0.1);
     fish6.putTo(0.1,-0.195,0.1);
     fish7.putTo(0.1,-0.194,0.1);
-    fish8.putTo(0.1,-0.193,0.1);
+    fish8.putTo(0.1,-0.193,0.1);*/
     w.add(&bait);
     w.add(&fish1);
     /*w.add(&fish2);
