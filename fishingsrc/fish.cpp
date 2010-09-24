@@ -12,8 +12,8 @@ Fish::Fish(QString pic, float w, float h):Thing(pic,w,h)
     noRudder=1;
     speed=0;
     MAX_SPEED=0.05;
-    BAIT_DISTANCE_THRESHOLD=0.1;
-    FACING_BAIT_THRESHOLD=0.3;
+    BAIT_DISTANCE_THRESHOLD=0.15;
+    FACING_BAIT_THRESHOLD=0.1;
     BAIT_TURN_ANGEL=0.1;
     JUMPBACK_DISTANCE=0.08;
     dir=3.14/6;
@@ -273,7 +273,12 @@ float Fish::facingBait()
     double baitDir=atan((baitZ-posZ)/(baitX-posX));
 //    qDebug()<<"dirs: "<<baitDir<<dir<<baitZ<<posZ<<baitX<<posX;
     //verify that the baitdir and dir are in the same unit
-    return baitDir-dir;
+    //baitDir+=3.1416/2;
+    float d=dir;
+    while(d>3.14)
+        d-=6.28;
+    qDebug()<<"==========="<<baitDir<<dir<<d;
+    return baitDir-d;
 }
 
 float Fish::baitDistance()
