@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'scene.h'
 **
-** Created: Tue Sep 14 19:32:01 2010
+** Created: Thu Sep 23 20:15:46 2010
 **      by: The Qt Meta Object Compiler version 61 (Qt 4.5.3)
 **
 ** WARNING! All changes made in this file will be lost!
