@@ -1,0 +1,48 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:563: checking for a BSD compatible install
+configure:616: checking whether build environment is sane
+configure:673: checking whether make sets ${MAKE}
+configure:719: checking for working aclocal
+configure:732: checking for working autoconf
+configure:745: checking for working automake
+configure:758: checking for working autoheader
+configure:771: checking for working makeinfo
+configure:833: checking for sdl-config
+configure:868: checking for SDL - version >= 1.1.6
+configure:953: cc -o conftest  -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT   conftest.c  -L/usr/lib -lSDL 1>&5
+configure:1041: checking how to run the C preprocessor
+configure:1062: cc -E -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/local/include/GL -I/usr/local/include -I/usr/X11R6/include/GL -I/usr/X11R6/include -O6 -mpentiumpro -ffast-math conftest.c >/dev/null 2>conftest.out
+cc1: error: unrecognized command line option "-mpentiumpro"
+configure: failed program was:
+#line 1056 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:1079: cc -E -traditional-cpp -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/local/include/GL -I/usr/local/include -I/usr/X11R6/include/GL -I/usr/X11R6/include -O6 -mpentiumpro -ffast-math conftest.c >/dev/null 2>conftest.out
+cc1: error: unrecognized command line option "-mpentiumpro"
+configure: failed program was:
+#line 1073 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:1096: cc -nologo -E -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/local/include/GL -I/usr/local/include -I/usr/X11R6/include/GL -I/usr/X11R6/include -O6 -mpentiumpro -ffast-math conftest.c >/dev/null 2>conftest.out
+cc: unrecognized option '-nologo'
+cc1: error: unrecognized command line option "-mpentiumpro"
+configure: failed program was:
+#line 1090 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:1125: checking for c++
+configure:1157: checking whether the C++ compiler (c++ -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/local/include/GL -I/usr/local/include -I/usr/X11R6/include/GL -I/usr/X11R6/include -O6 -mpentiumpro -ffast-math ) works
+configure:1173: c++ -o conftest -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/local/include/GL -I/usr/local/include -I/usr/X11R6/include/GL -I/usr/X11R6/include -O6 -mpentiumpro -ffast-math -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/local/include/GL -I/usr/local/include -I/usr/X11R6/include/GL -I/usr/X11R6/include -O6 -mpentiumpro -ffast-math  conftest.C  -L/usr/lib -lSDL 1>&5
+cc1plus: error: unrecognized command line option "-mpentiumpro"
+cc1plus: error: unrecognized command line option "-mpentiumpro"
+configure: failed program was:
+
+#line 1168 "configure"
+#include "confdefs.h"
+
+int main(){return(0);}
