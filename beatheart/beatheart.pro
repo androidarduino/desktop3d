@@ -7,6 +7,7 @@ TARGET = heartbeat
 QT += opengl
 DEPENDPATH += .
 INCLUDEPATH += .
+LIBS +=-lglut
 
 # Input
 HEADERS += widget.h

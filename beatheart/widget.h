@@ -3,6 +3,7 @@
 #include <QtGui>
 #include <QGLWidget>
 #include <QGLShader>
+#include <GL/glut.h>
 
 class DesktopGadget : public QGLWidget
 {
@@ -48,13 +49,15 @@ class HeartBeat : public DesktopGadget
 {
     Q_OBJECT
     public:
-        HeartBeat(QWidget *parent =0):DesktopGadget(parent){d_transparent=0;}
+        HeartBeat(QWidget *parent =0):DesktopGadget(parent){d_transparent=1;}
         ~HeartBeat(){}
     protected:
         void createObjects();
         void initializeGL();
     private:
         GLuint wood;
+        QGLShaderProgram* program;
+        QGLShader* shaderF, *shaderV;
 };
 
 #endif // WIDGET_H
