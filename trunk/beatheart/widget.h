@@ -31,6 +31,7 @@ class DesktopGadget : public QGLWidget
         virtual void mouseMoveEvent(QMouseEvent *event);
         virtual void mouseReleaseEvent( QMouseEvent * event );
         virtual void createObjects();
+        bool d_transparent;//control whether remove window border
     private:
         QBitmap mask;
         int xRot;
@@ -40,6 +41,16 @@ class DesktopGadget : public QGLWidget
         QPoint lastPos;
         void normalizeAngle(int * angle);
         void drawBox(float x, float y, float z, float width, float height, float depth);
+};
+
+class HeartBeat : public DesktopGadget
+{
+    Q_OBJECT
+    public:
+        HeartBeat(QWidget *parent =0):DesktopGadget(parent){d_transparent=0;}
+        ~HeartBeat(){}
+    protected:
+        void createObjects();
 };
 
 #endif // WIDGET_H
