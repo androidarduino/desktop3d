@@ -11,7 +11,8 @@ DesktopGadget::DesktopGadget(QWidget *parent):QGLWidget(parent)
     xRot = 0;
     yRot = 0;
     zRot = 0;
-    createObjects();
+    d_transparent=1;
+    //createObjects();
 }
 DesktopGadget::~DesktopGadget()
 {
@@ -98,6 +99,8 @@ void DesktopGadget::createObjects()
 
 void DesktopGadget::mouseReleaseEvent ( QMouseEvent * )
 {
+    if(d_transparent==0)
+        return;
     QImage img=grabFrameBuffer();
     mask=QBitmap::fromImage(img.createMaskFromColor(img.pixel(QPoint(10,10)),Qt::MaskInColor));
     setMask(mask);
