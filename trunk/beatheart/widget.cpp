@@ -12,7 +12,6 @@ DesktopGadget::DesktopGadget(QWidget *parent):QGLWidget(parent)
     yRot = 0;
     zRot = 0;
     d_transparent=1;
-    //createObjects();
 }
 DesktopGadget::~DesktopGadget()
 {

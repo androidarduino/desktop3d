@@ -1,5 +1,5 @@
 void main(void)
 {
-    gl_position=glModelViewProjectionMatrix * gl_Vertex;
-    gl_FragColor=glColor;
+    gl_Position=gl_ModelViewProjectionMatrix * gl_Vertex;
+    gl_FragColor=gl_Color/2;
 }
