@@ -2,6 +2,7 @@
 #define WIDGET_H
 #include <QtGui>
 #include <QGLWidget>
+#include <QGLShader>
 
 class DesktopGadget : public QGLWidget
 {
@@ -51,6 +52,9 @@ class HeartBeat : public DesktopGadget
         ~HeartBeat(){}
     protected:
         void createObjects();
+        void initializeGL();
+    private:
+        GLuint wood;
 };
 
 #endif // WIDGET_H
