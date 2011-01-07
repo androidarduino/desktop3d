@@ -1,5 +1,4 @@
 #include "widget.h"
-#include <QDateTime>
 /*
 todo:
 1. 
@@ -29,10 +28,13 @@ void Earth::initializeGL()
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_TEXTURE_2D);
-    earthTexture=bindTexture(QPixmap("earth.png"), GL_TEXTURE_2D);
+    QPixmap& pic=createSurface();
+    earthTexture=bindTexture(pic, GL_TEXTURE_2D);
+    delete &pic;
+
     glBindTexture(GL_TEXTURE_2D, earthTexture);
+
     glShadeModel(GL_SMOOTH);
-    qDebug()<<QDateTime::currentDateTimeUtc();
 }
 
 void Earth::createObjects()
@@ -46,8 +48,40 @@ void Earth::createObjects()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, earthTexture);
-    glRotatef(90,1,0,0);
-    gluSphere(quadratic, 0.9, 36, 72);
     glRotatef(-90,1,0,0);
+    gluSphere(quadratic, 0.9, 36, 72);
+    glRotatef(90,1,0,0);
     glDisable(GL_TEXTURE_2D);
+}
+
+QPixmap& Earth::createSurface()
+{
+    QDateTime time=QDateTime::currentDateTimeUtc();
+    int utcMinutes=time.time().hour()*60+time.time().minute();
+    //calculate the rect based on the utcMinutes
+    //utc=[0-1440]
+    int x=2048-(2048/60/24*utcMinutes)+1650;//split line
+    if(x>2048)
+        x-=2048;
+    int x1=x+1024;
+    if(x1>2048)
+        x1-=2048;
+    qDebug()<<utcMinutes<<x<<x1;
+    QRect rect1,rect2;
+    if(x<x1)
+    {
+        rect1.setRect(0,0,x,1024);
+        rect2.setRect(x1,0,2048-x1,1024);
+    }
+    if(x>x1)
+    {
+        rect1.setRect(x1,0,x-x1,1024);
+        rect2.setRect(0,0,0,0);
+    }
+    QPixmap* day=new QPixmap("earth.png");
+    QPixmap night("night.png");
+    QPainter painter(day);
+    painter.drawPixmap(rect1, night, rect1);
+    painter.drawPixmap(rect2, night, rect1);
+    return *day;
 }
