@@ -5,6 +5,7 @@
 #include <GL/glut.h>
 #include <QPainter>
 #include <QDateTime>
+#include <QTimer>
 
 class DesktopGadget : public QGLWidget
 {
@@ -35,13 +36,13 @@ class DesktopGadget : public QGLWidget
         virtual void mouseReleaseEvent( QMouseEvent * event );
         virtual void createObjects();
         bool d_transparent;//control whether remove window border
-    private:
-        QBitmap mask;
         int xRot;
         int yRot;
         int zRot;
-        GLuint listSquare;
         QPoint lastPos;
+    private:
+        QBitmap mask;
+        GLuint listSquare;
         void normalizeAngle(int * angle);
         void drawBox(float x, float y, float z, float width, float height, float depth);
 };
@@ -55,9 +56,17 @@ class Earth : public DesktopGadget
     protected:
         void createObjects();
         void initializeGL();
+        void drawText();
+        void mouseMoveEvent(QMouseEvent* event);
         QPixmap& createSurface();
     private:
-        GLuint earthTexture;
+        GLuint earthTexture, textTexture;
+        QStringList cities;
+        QPixmap text;
+        QTimer* timer;
+        int count;
+    private slots:
+        void refresh();
 };
 
 #endif // WIDGET_H
