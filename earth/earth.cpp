@@ -28,17 +28,26 @@ void Earth::initializeGL()
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_TEXTURE_2D);
-    QPixmap& pic=createSurface();
-    earthTexture=bindTexture(pic, GL_TEXTURE_2D);
-    delete &pic;
-
-    glBindTexture(GL_TEXTURE_2D, earthTexture);
-
     glShadeModel(GL_SMOOTH);
+
+    cities<<"Lodon"<<"Paris"<<"Helsinki"<<"Moscow"<<"Kabul"<<"New Deli";
+    cities<<"Dhakar"<<"Bankok"<<"Beijing"<<"Tokyo"<<"Sydney"<<"Solomon Island";
+    cities<<"Aukland"<<"Midway Island"<<"Hawaii"<<"Alaska"<<"Seattle"<<"Denver";
+    cities<<"Mexico City"<<"New York"<<"Caracas"<<"Brasilia"<<"Mid Atlantic"<<"Cape Verd"<<"Lodon";
+
+    setAutoFillBackground(false);
+
+    text=QPixmap("board.png");
+    timer=new QTimer();
+    connect(timer, SIGNAL(timeout()),this, SLOT(refresh()));
+    timer->start(1000);
+    count=59;
+    refresh();
 }
 
 void Earth::createObjects()
 {
+
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     GLUquadricObj *quadratic;               // Storage For Our Quadratic Objects ( NEW )
@@ -51,7 +60,73 @@ void Earth::createObjects()
     glRotatef(-90,1,0,0);
     gluSphere(quadratic, 0.9, 36, 72);
     glRotatef(90,1,0,0);
-    glDisable(GL_TEXTURE_2D);
+    drawText();
+}
+
+void Earth::refresh()
+{
+    if(++count!=60)
+    {
+        paintGL();
+        return;
+    }
+    count=0;
+    QPixmap& pic=createSurface();
+    earthTexture=bindTexture(pic, GL_TEXTURE_2D);
+    delete &pic;
+    glBindTexture(GL_TEXTURE_2D, earthTexture);
+    paintGL();
+}
+
+void Earth::mouseMoveEvent(QMouseEvent *event)
+{
+    int dx = event->x() - lastPos.x();
+    int dy = event->y() - lastPos.y();
+    QApplication::processEvents();
+    if (event->buttons() & Qt::LeftButton) {
+        setYRotation(yRot + 8 * dx);
+    } else if (event->buttons() & Qt::RightButton) {
+        move(pos().x()+dx, pos().y()+dy);
+        //not perfect yet.
+    }
+    lastPos = event->pos();
+}
+
+void Earth::drawText()
+{
+    int timezone=yRot/(16*15);
+    QString city=cities[24-timezone];
+    if(timezone>12)
+        timezone-=24;
+
+    text.fill(this, 96, 48);
+    QPainter painter(&text);
+    QDateTime datetime=QDateTime::currentDateTimeUtc();
+    datetime=datetime.addSecs(-timezone*3600);
+    QString info=QString("%1\n%2\nUTC-%3").arg(city).arg(datetime.time().toString()).arg(timezone);
+    painter.setPen(Qt::blue);
+    painter.drawText(4,4, 88, 40, Qt::AlignJustify|Qt::AlignHCenter, info);
+    painter.end();
+    textTexture=bindTexture(text, GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textTexture);
+    glPushMatrix();
+    //not rotating y with the globe
+    glRotated(-yRot / 16.0, 0.0, 1.0, 0.0);
+    glTranslatef(-1,1,0);
+    glScalef(0.5,0.5,0.5);
+    glBegin(GL_QUADS);
+    glColor3f(1.0f,1.0f,1.0f);			// Set The Color To white
+    glTexCoord2d(1,1);
+    glVertex3f( 0.8f, 0.4f, 0);		// Top Right Of The Quad (Front)
+    glTexCoord2d(0,1);
+    glVertex3f(-0.8f, 0.4f, 0);		// Top Left Of The Quad (Front)
+    glTexCoord2d(0,0);
+    glVertex3f(-0.8f,-0.4f, 0);		// Bottom Left Of The Quad (Front)
+    glTexCoord2d(1,0);
+    glVertex3f( 0.8f,-0.4f, 0);		// Bottom Right Of The Quad (Front)
+    glColor3f(1,1,1);
+    glEnd();
+    glPopMatrix();
 }
 
 QPixmap& Earth::createSurface()
@@ -66,7 +141,6 @@ QPixmap& Earth::createSurface()
     int x1=x+1024;
     if(x1>2048)
         x1-=2048;
-    qDebug()<<utcMinutes<<x<<x1;
     QRect rect1,rect2;
     if(x<x1)
     {
