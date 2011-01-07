@@ -99,15 +99,15 @@ void Earth::drawText()
     if(timezone>12)
         timezone-=24;
 
-    text.fill(this, 96, 48);
-    QPainter painter(&text);
+    QPixmap board(text);
+    QPainter painter(&board);
     QDateTime datetime=QDateTime::currentDateTimeUtc();
     datetime=datetime.addSecs(-timezone*3600);
     QString info=QString("%1\n%2\nUTC-%3").arg(city).arg(datetime.time().toString()).arg(timezone);
     painter.setPen(Qt::blue);
     painter.drawText(4,4, 88, 40, Qt::AlignJustify|Qt::AlignHCenter, info);
     painter.end();
-    textTexture=bindTexture(text, GL_TEXTURE_2D);
+    textTexture=bindTexture(board, GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textTexture);
     glPushMatrix();
     //not rotating y with the globe
