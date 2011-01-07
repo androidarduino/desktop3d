@@ -3,6 +3,8 @@
 #include <QtGui>
 #include <QGLWidget>
 #include <GL/glut.h>
+#include <QPainter>
+#include <QDateTime>
 
 class DesktopGadget : public QGLWidget
 {
@@ -53,6 +55,7 @@ class Earth : public DesktopGadget
     protected:
         void createObjects();
         void initializeGL();
+        QPixmap& createSurface();
     private:
         GLuint earthTexture;
 };
