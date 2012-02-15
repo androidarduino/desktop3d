@@ -1,0 +1,131 @@
+//                 --------|  WARNING  |--------!!
+// This is a generated file.  Modifying the text or layout of 
+// this file will mean that the 3D Asset Viewer application will no 
+// longer be able to read it. 
+
+// Changing numeric values is allowable, though care should be taken
+// not to inadvertantly change the file structure.
+
+import QtQuick 1.0
+import Qt3D 1.0
+
+Item3D {
+    id: sailor
+    property double translateX: 0; 
+    property double translateY: 0; 
+    property double translateZ: 0; 
+    property double rotationX: 0; 
+    property double rotationY: 0; 
+    property double rotationZ: 0; 
+    property double assetScale: 1.0; 
+    property alias color: eff.color;
+
+
+    Translation3D {
+        id: transformTranslate
+        translate: Qt.vector3d(0+translateX, 0+translateY, 0+translateZ)
+    }
+
+    Rotation3D {
+        id: transformRotateX
+        angle: 0+rotationX
+        axis: Qt.vector3d(1, 0, 0)
+    }
+
+    Rotation3D {
+        id: transformRotateY
+        angle: 0+rotationY
+        axis: Qt.vector3d(0, 1, 0)
+    }
+
+    Rotation3D {
+        id: transformRotateZ
+        angle: 0+rotationZ
+        axis: Qt.vector3d(0, 0, 1)
+    }
+
+    Scale3D {
+        id: transformScale
+        scale: Qt.vector3d(0.1*assetScale, 0.1*assetScale, 0.1*assetScale)
+    }
+
+    Mesh {
+        id: source_mesh
+        source: "sailor.3ds"
+    }
+
+    mesh: source_mesh
+    transform: [
+        transformScale,
+        transformRotateX,
+        transformRotateY,
+        transformRotateZ,
+        transformTranslate,
+    ]
+    effect: Effect {
+        id: eff
+        decal: true
+        blending: false
+        color: "red"
+        }
+    state: "depot"
+
+    states: [
+        State {
+            name: "depot"
+            PropertyChanges { target: sailor; x: 0; z: 0 }
+        },
+        State {
+            name: "TargetA"
+            PropertyChanges { target: sailor; x: 0.25; z: -0.37  }
+        },
+        State {
+            name: "TargetB"
+            PropertyChanges { target: sailor; x: 0.70; z: -0.37  }
+        },
+        State {
+            name: "TargetC"
+            PropertyChanges { target: sailor; x: 1.15; z: -0.37  }
+        },
+        State {
+            name: "GarageA"
+            PropertyChanges { target: sailor; x: 1.13; z: -2.8  }
+        },
+        State {
+            name: "GarageB"
+            PropertyChanges { target: sailor; x: 2.08; z: -2.8  }
+        },
+        State {
+            name: "GarageC"
+            PropertyChanges { target: sailor; x: 3.0; z: -2.8  }
+        },
+        State {
+            name: "Insurance"
+            PropertyChanges { target: sailor; x: 3.85; z: -2.85  }
+        },
+        State {
+            name: "PirateA"
+            PropertyChanges { target: sailor; x: 1.82; z: -0.15  }
+        },
+        State {
+            name: "PirateB"
+            PropertyChanges { target: sailor; x: 1.85; z: -0.37  }
+        },
+        State {
+            name: "PilotA"
+            PropertyChanges { target: sailor; x: 2.76; z: -0.15  }
+        },
+        State {
+            name: "PilotB"
+            PropertyChanges { target: sailor; x: 3.15; z: -0.15  }
+        }
+    ]
+
+    transitions: Transition {
+        SequentialAnimation{
+            NumberAnimation { target: sailor; property: "y"; duration: 500; to: 0.5; easing.type: Easing.InOutQuad }
+            PropertyAnimation{target: sailor;properties: "x,z"; duration: 1000}
+            NumberAnimation { target: sailor; property: "y"; duration: 500; to: 0; easing.type: Easing.InOutQuad }
+        }
+    }
+}
